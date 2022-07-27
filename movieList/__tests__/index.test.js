@@ -17,37 +17,47 @@ afterAll(async () => {
 
 
 describe('movie app tests', () => {
-    test('Testing the functionality of the movie app', async() =>{
-
+    test('Adding a movie', async() =>{
+        // clearing the input box
         await driver.findElement(By.xpath('//input')).clear() 
 
-        await driver.findElement(By.xpath('//input')).sendKeys(`Home Alone\n`)
+        // inputting Home Alone
+        await driver.findElement(By.xpath('//input')).sendKeys(`Home Alone`)
+            await driver.sleep(2000)
 
-        // the movie is added hidden
+        // clicking the button 
+        await driver.findElement(By.xpath('//button')).click()
 
-        await driver.findElement(By.xpath('//span')).click()
+        let movie =await driver.findElement(By.xpath('//li'))
+        let displayed= movie.isDisplayed()
+        await driver.sleep(1000)
+        expect(displayed).toBeTruthy()
 
-        await driver.sleep(3000)
 
-        // gets added when we want to watch
+    })
 
-        await driver.findElement(By.xpath('//span')).click()
+    test('Crossing off a movie and testing value ', async() =>{
+        await driver.sleep(2000)
 
-        await driver.sleep(3000)
+    // the movie is hidden after being watched
+    await driver.findElement(By.xpath('//span')).click()
+    let message = await driver.findElement(By.id("message")).getText()
+    console.log(message)
+    expect(message).toBe('Home Alone watched!')
 
-        // the movie is hidden after being watched
-
-        await driver.findElement(By.xpath('//span')).click()
-
-        await driver.sleep(3000)
-
-        // deleting the movie after being "watched"
-
-        await driver.findElement(By.xpath('(//button)[2]')).click()
-
-        await driver.sleep(3000)
+    })
 
         
-    })
+    test('Deleting the movie', async() => {
+
+        await driver.sleep(2000)
+    // deleting the movie after being "watched"
+    await driver.findElement(By.xpath('(//button)[2]')).click()
+    let message = await driver.findElement(By.id("message")).getText()
+    console.log(message)
+    expect(message).toBe('Home Alone deleted!')
+
+        await driver.sleep(1000)
+    })   
 
 })
